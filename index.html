@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Pattern viewer</title>
+		<style>
+#help {
+	color: #ddd;
+	font-family: Arial;
+	font-size: 48px;
+	margin: 20px;
+	text-align: center;
+}
+		</style>
+	</head>
+	<body>
+		<div id="help">Please drop a pattern image on this page.</div>
+		<script>
+function cancel(e) {
+	e.stopPropagation();
+	e.preventDefault();
+}
+var html = document.documentElement;
+var help = document.getElementById('help');
+html.addEventListener('dragover', cancel, false);
+html.addEventListener('dragenter', cancel, false);
+html.addEventListener('drop', function(event) {
+	if (event.preventDefault) event.preventDefault();
+	if (event.dataTransfer.files.length > 0) {
+		var file = event.dataTransfer.files[0];
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			html.style.backgroundImage = 'url(' + e.target.result + ')';
+			if (help) {
+				help.parentElement.removeChild(help);
+				help = null;
+			}
+		};
+		reader.readAsDataURL(file);
+	}
+	return false;
+}, false);
+		</script>
+	</body>
+</html>
